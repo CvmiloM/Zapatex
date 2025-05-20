@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Zapatex - Venta</title>
+  <script src="/static/js/script.js" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-yellow-400 font-sans min-h-screen flex flex-col items-center justify-start py-10 relative">
+
+  <h1 class="text-4xl font-bold mb-8 border-b-2 border-yellow-400 pb-2">Zapatex - Venta</h1>
+
+  {% if mensaje %}
+    <div class="mb-4 px-4 py-2 rounded bg-green-700 text-white font-semibold max-w-xl w-full text-center">
+      {{ mensaje }}
+    </div>
+  {% endif %}
+
+  <div class="bg-gray-900 p-6 rounded-xl shadow-md w-full max-w-xl mb-6">
+    <h2 class="text-2xl font-semibold mb-4">Sucursales</h2>
+    <input
+      type="text"
+      id="buscadorSucursal"
+      oninput="filtrarSucursales()"
+      placeholder="Buscar sucursal..."
+      class="w-full p-2 mb-4 rounded bg-black border border-yellow-400 text-yellow-400 placeholder-yellow-600"
+    />
+
+   <ul id="listaSucursales" class="space-y-2">
+  {% for sucursal in sucursales %}
+    <li class="sucursal-item flex justify-between border-b border-yellow-700 pb-1" data-nombre="{{ sucursal.nombre | lower }}">
+      <span>{{ sucursal.nombre }}</span>
+      <span>Cant: {{ sucursal.cantidad }} | ${{ sucursal.precio }}</span>
+    </li>
+  {% endfor %}
+</ul>
+
+    <div class="mt-4 pt-4 border-t border-yellow-600">
+      <strong>Casa Matriz</strong> - Cant: {{ casa_matriz.cantidad }} | ${{ casa_matriz.precio }}
+    </div>
+  </div>
+
+  <div class="bg-gray-900 p-6 rounded-xl shadow-md w-full max-w-xl space-y-4">
+    <div>
+      <label for="selectSucursal" class="block mb-1">Sucursal:</label>
+      <select
+        id="selectSucursal"
+        class="w-full p-2 rounded bg-black border border-yellow-400 text-yellow-400"
+      >
+        {% for sucursal in sucursales %}
+          <option value="{{ sucursal.nombre }}">{{ sucursal.nombre }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+      <label for="cantidad" class="block mb-1">Cantidad:</label>
+      <input
+        type="number"
+        id="cantidad"
+        min="1"
+        placeholder="Ej: 5"
+        class="w-full p-2 rounded bg-black border border-yellow-400 text-yellow-400 placeholder-yellow-600"
+      />
+    </div>
+
+    <div class="flex flex-col gap-4 sm:flex-row">
+      <button
+        onclick="calcular()"
+        class="flex-1 bg-yellow-400 text-black font-bold py-2 px-4 rounded hover:bg-yellow-300 transition"
+      >
+        Calcular
+      </button>
+      <button
+        id="btnPagar"
+        class="flex-1 bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-400 transition disabled:opacity-50"
+        disabled
+      >
+        Pagar con Webpay
+      </button>
+    </div>
+
+    <div id="resultados" class="mt-4 text-sm text-yellow-300"></div>
+    <div id="estadoPago" class="mt-2 text-sm text-green-400 hidden">Redirigiendo a Webpay...</div>
+  </div>
+
+  <!-- Botón para Easter Egg -->
+  <button
+    id="btnEasterEgg"
+    class="fixed bottom-4 right-4 bg-yellow-500 text-black text-xs px-2 py-1 rounded-full shadow hover:bg-yellow-400"
+  >
+    🥚
+  </button>
+
+  <!-- Modal oculto -->
+  <div
+    id="easterModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+  >
+    <img
+      src="/static/easter_egg/egg.JPG"
+      alt="Easter Egg"
+      class="max-w-xs rounded-lg cursor-pointer"
+      id="closeEasterEgg"
+    />
+  </div>
+
+</body>
+</html>
